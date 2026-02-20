@@ -30,14 +30,18 @@ Each module will:
 Example module structure:
 ```
 src/
-├── modules/
-│   ├── order/
-│   │   ├── domain/
-│   │   ├── application/
-│   │   └── infrastructure/
-│   ├── payment/
-│   ├── inventory/
-│   └── user/
+ ├── user/
+ │    ├── User.java
+ │    └── UserService.java
+ │
+ ├── order/
+ │    ├── Order.java
+ │    └── OrderService.java
+ │
+ ├── payment/
+ │    ├── PaymentService.java
+ │
+ └── MainApplication.java
 ```
 
 ## Consequences
@@ -62,3 +66,4 @@ src/
 - **Technology stack**: Must use consistent technology across all modules
 - **Refactoring effort**: Need to restructure existing code into modules
 - **Learning curve**: Team needs to understand domain boundaries and module communication patterns
+
