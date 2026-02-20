@@ -1,65 +1,31 @@
-## Using Interfaces and Events for Inter-Module Communication
+## Use Domain-Based Module Structure
 ## Context
-In our Modular Monolith architecture (ADR-001), modules need to communicate with each other while maintaining loose coupling. For example:
-- Order module needs to check inventory availability
-- Payment module needs to notify Order module of payment status
-- User module needs to validate user credentials for orders
-
-We need a communication strategy that:
-- Prevents tight coupling between modules
-- Maintains clear module boundaries
-- Allows for future extraction to microservices
-- Supports both synchronous and asynchronous interactions
-
-Options considered:
-1. Direct method calls: Simple but creates tight coupling
-2. Shared database: Easy but violates encapsulation
-3. Interface-based contracts: Provides abstraction layer
-4. Event-driven communication: Enables loose coupling for async operations
+Although we are using a Modular Monolith architecture, poor internal organization could still lead to tight coupling and unclear responsibilities.
+To maintain modularity inside a single application, we need a clear strategy for structuring the codebase.
 
 ## Decision
-We will implement a hybrid approach using:
+We decided to structure the system based on business domains.
+Each domain will contain its own models, services, and logic.
+Modules will communicate through defined interfaces or service calls only.
 
-1. Synchronous Communication: Interface-Based Contracts
-   - For immediate responses (queries and commands that need instant feedback)
-   - Modules expose public interfaces only
-   - Use dependency injection for implementations
-
-2. Asynchronous Communication: Domain Events
-   - For operations that don't need immediate response
-   - Events for notifications and state changes
-   - Event handlers process events within interested modules
-
-Communication Rules:
-- Modules expose public interfaces only
-- No direct access to other module's internal classes
-- Use dependency injection for interface implementations
-- Events for notifications and async operations
-- No shared database tables between modules
-- API contracts versioned and documented
+## Rational
+1. Aligns with Domain-Driven Design (DDD) principles
+2. Improves cohesion within modules
+3. Reduces coupling between modules
+4. Makes the system easier to maintain and test
+5. Supports future separation into microservices
 
 ## Consequences
+Pros
+1. Clear ownership per module
+2. Easier team collaboration
+3. Improved maintainability
+4. Better scalability in the future
 
-### Positive
-- Loose coupling: Modules depend on abstractions, not implementations
-- Testability: Easy to mock interfaces for unit testing
-- Flexibility: Can swap implementations without affecting consumers
-- Clear contracts: Public APIs are explicit and documented
-- Async support: Events enable non-blocking operations
-- Migration ready: Interfaces can become REST/gRPC calls when extracting to microservices
-- Event sourcing option: Event-based communication supports audit trails
-
-### Negative
-- Complexity: More code than direct method calls
-- Learning curve: Team needs to understand event-driven patterns
-- Debugging difficulty: Event flows harder to trace than direct calls
-- Performance overhead: Slight latency from event bus (though minimal in-process)
-- Eventual consistency: Async events may create temporary inconsistencies
-
-### Neutral
-- Framework dependency: Need event bus library (e.g., MediatR, Spring Events)
-- Documentation overhead: Must maintain interface contracts and event schemas
-- Governance required: Need architectural guidelines to prevent misuse
+Cons
+1. Requires discipline to maintain boundaries
+2. Developers must understand domain separation clearly
+3. Risk of accidental cross-module dependency
 
 ## Sample code
 ### orderService.java
