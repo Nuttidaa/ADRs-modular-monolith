@@ -60,3 +60,27 @@ Communication Rules:
 - Framework dependency: Need event bus library (e.g., MediatR, Spring Events)
 - Documentation overhead: Must maintain interface contracts and event schemas
 - Governance required: Need architectural guidelines to prevent misuse
+
+## Sample code
+### orderService.java
+``` python
+package order;
+
+import payment.PaymentService;
+
+public class OrderService {
+
+    private PaymentService paymentService;
+
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+
+    public void placeOrder(Order order) {
+        System.out.println("Order created with amount: " + order.getAmount());
+        paymentService.processPayment(order.getAmount());
+    }
+}
+```
+This is inter-module communication via the service.
+The Order function does not directly access the Payment database.
