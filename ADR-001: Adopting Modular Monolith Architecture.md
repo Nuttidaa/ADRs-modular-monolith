@@ -29,7 +29,7 @@ Cons
 
 ## Sample Code
 Project structure example:
-
+``` python
 src/
  ├── user/
  │    ├── User.java
@@ -45,3 +45,5 @@ src/
  └── MainApplication.java
  
  The application runs as a single deployable unit.
+```
+The application runs as a single deployable unit.
