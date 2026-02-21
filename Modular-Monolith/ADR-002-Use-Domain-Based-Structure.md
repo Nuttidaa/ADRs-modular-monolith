@@ -30,23 +30,37 @@ Cons
 ## Sample code
 ### orderService.java
 ``` python
-package order;
-
-import payment.PaymentService;
+// order/OrderService.java
+import payment.PaymentGateway;
 
 public class OrderService {
 
-    private PaymentService paymentService;
+    private PaymentGateway paymentGateway;
 
-    public OrderService(PaymentService paymentService) {
-        this.paymentService = paymentService;
+    public OrderService(PaymentGateway paymentGateway) {
+        this.paymentGateway = paymentGateway;
     }
 
-    public void placeOrder(Order order) {
-        System.out.println("Order created with amount: " + order.getAmount());
-        paymentService.processPayment(order.getAmount());
+    public void createOrder(double amount) {
+        paymentGateway.pay(amount);
     }
 }
 ```
-This is inter-module communication via the service.
+### paymentGateway.java
+``` python
+// payment/PaymentGateway.java
+public interface PaymentGateway {
+    void pay(double amount);
+}
+```
+### paymentService.java
+``` python
+// payment/PaymentService.java
+public class PaymentService implements PaymentGateway {
+    @Override
+    public void pay(double amount) {
+        System.out.println("Paid: " + amount);
+    }
+}
+```
 The Order function does not directly access the Payment database.
